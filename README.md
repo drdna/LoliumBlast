@@ -45,15 +45,20 @@ a. Cross-reference GATK versus SNPcaller variants:
 ```
 perl ValidateGatkSNPs.pl <GenomeID>_genotyped-snps.vcf SNP_DIR
 ```
-b. Generate bed file listing validated SNP sites:
+b. Generate bed format file listing validated SNP sites:
 ```
-perl SNPsummary.pl <GATK_DIR> | awk '{OFS="\t"; print $1, $2, $2, "SNP_" $2}' > All_SNP_sites.txt
+perl SNPsummary.pl <GATK_DIR> > All_SNP_sites.txt
 ```
 c. Visualize sites in an R Shiny graphical browser to identify overly dense SNPs resulting from admixture/RIP (i.e. non-phylogenetic)
-d. Use awk to filter out non-phylogenetic SNP sites
+d. Use awk to filter out non-phylogenetic SNP sites and write to bed file:
+```
+awk '$1 ~ /contig1$/ && $2 > 2300000 && $2 < 5600000 {OFS="\t"; print $1, $2, $2, "SNP_" $2}' > Candidate_SNPs.bed
 e. Generate IGV report to visualize read alignments across the filtered sites:
 ```
-igv_reports/report.py ~/Filtered_SNPs.bed --fasta ~/TF05-1.fasta --tracks <GenomeID1>.bam <GenomeID2>.bam ... --output FilteredSNPsreport.html
+igv_reports/report.py ~/Candidate_SNPs.bed --fasta ~/TF05-1.fasta --tracks <GenomeID1>.bam <GenomeID2>.bam ... --output FilteredSNPsreport.html
 ```
-
-
+f. Manually inspect each SNP and mark sites for filtering by prefixing contig ID with # in the All_SNPs_sites.txt file if; i) there are missing data for any sample; or ii) if the site is heterozygous (i.e. a repeat locus)
+g. Generate fasta file based on validated SNP sites:
+```
+perl Summary2Fasta All_SNP_sites.txt > Filtered_SNP_sites.fasta
+```
