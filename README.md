@@ -12,6 +12,9 @@ b. Call SNPs using GATK
 ### 2. Generate SNP calls using SNPcaller
 
 a. Trim reads using Trimmomatic and assemble genomes using SPAdes
+```
+sbatch trim-spades.sh <reads_dir> <GenomeID>
+```
 b. Standardize contig headers:
 ```
 perl SimpleFastaHeaders.pl <GenomeID>.fasta
@@ -53,6 +56,7 @@ c. Visualize sites in an R Shiny graphical browser to identify overly dense SNPs
 d. Use awk to filter out non-phylogenetic SNP sites and write to bed file:
 ```
 awk '$1 ~ /contig1$/ && $2 > 2300000 && $2 < 5600000 {OFS="\t"; print $1, $2, $2, "SNP_" $2}' > Candidate_SNPs.bed
+```
 e. Generate IGV report to visualize read alignments across the filtered sites:
 ```
 igv_reports/report.py ~/Candidate_SNPs.bed --fasta ~/TF05-1.fasta --tracks <GenomeID1>.bam <GenomeID2>.bam ... --output FilteredSNPsreport.html
