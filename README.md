@@ -6,6 +6,7 @@ Methods and code for analyzing Lolium blast in Uruguay
 ### 1. Generate SNP calls using Bowtie2/GATK
 
 a. Align raw reads using bowtie2 (high sensitivity mode)
+
 b. Call SNPs using GATK
 
 ---
