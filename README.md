@@ -54,6 +54,7 @@ b. Generate bed format file listing validated SNP sites:
 perl SNPsummary.pl <GATK_DIR> > All_SNP_sites.txt
 ```
 c. Visualize sites in R Shiny graphical browsers ([ShinySNPsummary.R](/scripts/ShinySNPsummary.R) & [Summary2SNPdensity.R](/scripts/Summary2SNPdensity.R)to identify overly dense SNPs resulting from admixture/RIP (i.e. non-phylogenetic)
+
 d. Use awk to filter out non-phylogenetic SNP sites and write to bed file:
 ```
 awk '$1 ~ /contig1$/ && $2 > 2300000 && $2 < 5600000 {OFS="\t"; print $1, $2, $2, "SNP_" $2}' > Candidate_SNPs.bed
